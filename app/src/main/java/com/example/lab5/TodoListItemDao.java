@@ -19,6 +19,9 @@ public interface TodoListItemDao{
     @Query("SELECT * FROM `todo_list_items` ORDER BY `order`")
     List<TodoListItem> getAll();
 
+    @Query("SELECT * FROM `todo_list_items` ORDER BY `order`")
+    List<TodoListItem> getAllLive();
+
     @Update
     int update(TodoListItem todoListItem);
 
