@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHolder>{
 
     private List<TodoListItem> todoItems = Collections.emptyList();
     private Consumer<TodoListItem> onCheckBoxClicked;
+    private BiConsumer<TodoListItem, String> onTextEditHandler;
 
     public void setTodoListItems(List<TodoListItem> newTodoItems){
         this.todoItems.clear();
@@ -26,6 +28,9 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
 
     public void setOnCheckBoxClickedHandler(Consumer<TodoListItem> onCheckBoxClicked){
         this.onCheckBoxClicked = onCheckBoxClicked;
+    }
+    public void setOnTextEditedHandler(BiConsumer<TodoListItem, String> onTextEdited){
+        this.onTextEditHandler = onTextEdited;
     }
     @NonNull
     @Override
@@ -62,6 +67,11 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
             this.cb.setOnClickListener(view ->{
                 if( onCheckBoxClicked == null) return;
                 onCheckBoxClicked.accept(todoItem);
+            });
+            this.textView.setOnFocusChangeListener((view, hasFocus) -> {
+                if (!hasFocus){
+                    onTextEditHandler.accept(todoItem, textView.getText().toString());
+                }
             });
         }
 

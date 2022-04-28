@@ -25,12 +25,13 @@ public class TodoListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_todo_list);
 
 
-        TodoListViewModel viewModel = new ViewModelProvider(this)
+         viewModel = new ViewModelProvider(this)
                 .get(TodoListViewModel.class);
 
         TodoListAdapter adapter = new TodoListAdapter();
-        adapter.setHasStableIds(true);
         adapter.setOnCheckBoxClickedHandler(viewModel::toggleCompleted);
+        adapter.setHasStableIds(true);
+        adapter.setOnTextEditedHandler(viewModel::updateText);
         viewModel.getTodoListItems().observe(this, adapter::setTodoListItems);
 
         recyclerView = findViewById(R.id.todo_items);

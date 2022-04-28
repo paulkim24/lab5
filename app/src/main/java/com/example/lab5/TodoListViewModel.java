@@ -33,11 +33,16 @@ public class TodoListViewModel extends AndroidViewModel {
 
         return todoListItems;
     }
-public void toggleCompleted(TodoListItem todoListItem){
+    public void toggleCompleted(TodoListItem todoListItem){
         todoListItem.completed = !todoListItem.completed;
         todoListItemDao.update(todoListItem);
-}
+    }
     private void loadUsers(){
         todoListItems =  todoListItemDao.getAllLive();
     }
+    public void updateText(TodoListItem todoListItem, String newText){
+        todoListItem.text = newText;
+        todoListItemDao.update(todoListItem);
+    }
+
 }
