@@ -2,6 +2,7 @@ package com.example.lab5;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import android.content.Context;
 import android.view.View;
@@ -96,5 +97,33 @@ public class TodoListActivityTest {
             assertEquals(newText, afterTodoList.get(afterTodoList.size() - 1).text);
 
         });
+    }
+
+    @Test
+    public void testDeleteTodo(){
+        ActivityScenario<TodoListActivity> scenario
+                = ActivityScenario.launch(TodoListActivity.class);
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
+
+        scenario.onActivity(activity -> {
+            List<TodoListItem> beforeTodoList = todoListItemDao.getAll();
+
+            RecyclerView recyclerView = activity.recyclerView;
+            RecyclerView.ViewHolder firstVH = recyclerView.findViewHolderForAdapterPosition(0);
+            assertNotNull(firstVH);
+            long id = firstVH.getItemId();
+
+            View deleteButton = firstVH.itemView.findViewById(R.id.delete_btn);
+            deleteButton.performClick();
+
+            List<TodoListItem> afterTodoList = todoListItemDao.getAll();
+            assertEquals(beforeTodoList.size() - 1, afterTodoList.size());
+
+            TodoListItem editedItem = todoListItemDao.get(id);
+            assertNull(editedItem);
+        });
+
     }
 }
