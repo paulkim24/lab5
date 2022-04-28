@@ -50,7 +50,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
     public long getItemId(int position){ return todoItems.get(position).id;}
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView textView;
         private TodoListItem todoItem;
         private final CheckBox cb;
@@ -60,7 +60,7 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
             this.cb = (CheckBox)itemView.findViewById(R.id.completed);
 
             this.cb.setOnClickListener(view ->{
-                if(onCheckBoxClicked == null) return;
+                if( onCheckBoxClicked == null) return;
                 onCheckBoxClicked.accept(todoItem);
             });
         }

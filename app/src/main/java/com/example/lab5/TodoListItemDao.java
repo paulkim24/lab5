@@ -1,5 +1,6 @@
 package com.example.lab5;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -20,7 +21,7 @@ public interface TodoListItemDao{
     List<TodoListItem> getAll();
 
     @Query("SELECT * FROM `todo_list_items` ORDER BY `order`")
-    List<TodoListItem> getAllLive();
+    LiveData<List<TodoListItem>> getAllLive();
 
     @Update
     int update(TodoListItem todoListItem);
