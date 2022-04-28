@@ -23,6 +23,9 @@ public interface TodoListItemDao{
     @Query("SELECT * FROM `todo_list_items` ORDER BY `order`")
     LiveData<List<TodoListItem>> getAllLive();
 
+    @Query("SELECT `order` + 1 FROM `todo_list_items` ORDER BY `order` DESC LIMIT 1")
+    int getOrderForAppend();
+
     @Update
     int update(TodoListItem todoListItem);
 

@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.List;
 
 public class TodoListActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
+    private TodoListViewModel viewModel;
+    private EditText newTodoText;
+    private Button addTodoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,17 @@ public class TodoListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+        this.newTodoText = this.findViewById(R.id.new_todo_text);
+        this.addTodoButton = this.findViewById(R.id.add_todo_btn);
 
+        addTodoButton.setOnClickListener(this::onAddTodoClicked);
+
+
+    }
+
+    void onAddTodoClicked(View view) {
+        String text = newTodoText.getText().toString();
+        newTodoText.setText("");
+        viewModel.createTodo(text);
     }
 }
