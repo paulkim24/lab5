@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lab5</string>
+    <string name="x">X</string>
+    <string name="todo_list_item">todo list item</string>
+</resources>
