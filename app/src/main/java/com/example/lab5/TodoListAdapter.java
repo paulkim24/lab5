@@ -11,15 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHolder>{
 
     private List<TodoListItem> todoItems = Collections.emptyList();
+    private Consumer<TodoListItem> onCheckBoxClicked;
 
     public void setTodoListItems(List<TodoListItem> newTodoItems){
         this.todoItems.clear();
         this.todoItems = newTodoItems;
         notifyDataSetChanged();
+    }
+
+    public void setOnCheckBoxClickedHandler(Consumer<TodoListItem> onCheckBoxClicked){
+        this.onCheckBoxClicked = onCheckBoxClicked;
     }
     @NonNull
     @Override
@@ -52,6 +58,11 @@ public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHo
             super(itemView);
             this.textView = itemView.findViewById(R.id.todo_item_text);
             this.cb = (CheckBox)itemView.findViewById(R.id.completed);
+
+            this.cb.setOnClickListener(view ->{
+                if(onCheckBoxClicked == null) return;
+                onCheckBoxClicked.accept(todoItem);
+            });
         }
 
         public TodoListItem getTodoItem() {return todoItem;}
