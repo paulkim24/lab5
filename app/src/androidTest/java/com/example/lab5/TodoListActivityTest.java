@@ -1,6 +1,7 @@
 package com.example.lab5;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import android.content.Context;
 import android.view.View;
@@ -28,9 +29,9 @@ public class TodoListActivityTest {
     TodoDatabase testDb;
     TodoListItemDao todoListItemDao;
 
-    private static void forceLayout(RecyclerView recylclerView){
-        recylclerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        recylclerView.layout(0, 0, 1080, 2280);
+    private static void forceLayout(RecyclerView recyclerView){
+        recyclerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        recyclerView.layout(0, 0, 1080, 2280);
     }
 
     @Before
@@ -55,6 +56,33 @@ public class TodoListActivityTest {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+           RecyclerView recyclerView = activity.recyclerView;
+           RecyclerView.ViewHolder firstVH = recyclerView.findViewHolderForAdapterPosition(0);
+           assertNotNull(firstVH);
+           long id = firstVH.getItemId();
+
+           EditText todoText = firstVH.itemView.findViewById(R.id.todo_item_text);
+           todoText.requestFocus();
+           todoText.setText("Ensure all tests pass");
+           todoText.clearFocus();
+
+           TodoListItem editedItem = todoListItemDao.get(id);
+           assertEquals(newText, editedItem.text);
+        });
+    }
+
+
+    @Test
+    public void TestAddNewTodo() {
+        String newText = "Ensure all tests pass";
+
+        ActivityScenario<TodoListActivity> scenario
+                = ActivityScenario.launch(TodoListActivity.class);
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
+
+        scenario.onActivity(activity -> {
             List<TodoListItem> beforeTodoList = todoListItemDao.getAll();
 
             EditText newTodoText = activity.findViewById(R.id.new_todo_text);
@@ -64,8 +92,9 @@ public class TodoListActivityTest {
             addTodoButton.performClick();
 
             List<TodoListItem> afterTodoList = todoListItemDao.getAll();
-            assertEquals(beforeTodoList.size() +1, afterTodoList.size());
-            assertEquals(newText, afterTodoList.get(afterTodoList.size()-1).text);
+            assertEquals(beforeTodoList.size() + 1, afterTodoList.size());
+            assertEquals(newText, afterTodoList.get(afterTodoList.size() - 1).text);
+
         });
     }
 }
