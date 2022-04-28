@@ -4,11 +4,12 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-public class TodoListViewModel extends AndroidViewModel{
+public class TodoListViewModel extends AndroidViewModel {
     private LiveData<List<TodoListItem>> todoListItems;
     private final TodoListItemDao todoListItemDao;
 
@@ -28,6 +29,6 @@ public class TodoListViewModel extends AndroidViewModel{
     }
 
     private void loadUsers(){
-        todoListItems = todoListItemDao.getAllLive();
+        todoListItems =  todoListItemDao.getAllLive();
     }
 }
